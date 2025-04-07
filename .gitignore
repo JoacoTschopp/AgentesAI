@@ -5,3 +5,4 @@ __pycache__/
 .env
 history.json
 ResCTM.json
+pdfs/
