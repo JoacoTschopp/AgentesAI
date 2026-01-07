@@ -440,6 +440,7 @@ AgentesAI/
 ```
 
 **Key Files:**
+
 - ⭐ **prompts.py**: Centralized prompt engineering with best practices
 - ⭐ **pdf_ingestion_service.py**: Complete RAG pipeline
 - ⭐ **circuit_breaker_llm.py**: Automatic OpenAI ↔ Gemini failover
@@ -493,12 +494,14 @@ docker-compose --profile dev up -d
 This project demonstrates advanced software engineering and AI/ML skills:
 
 ### 1. **Clean Architecture Implementation**
+
 - ✅ Hexagonal Architecture (Ports & Adapters)
 - ✅ SOLID principles throughout
 - ✅ Dependency Inversion for testability
 - ✅ Clear separation of concerns
 
 ### 2. **AI/ML Engineering**
+
 - ✅ Multi-agent system design
 - ✅ RAG pipeline implementation (PDF → Embeddings → Search → Generation)
 - ✅ Vector database integration (ChromaDB)
@@ -506,6 +509,7 @@ This project demonstrates advanced software engineering and AI/ML skills:
 - ✅ LLM orchestration with LangChain
 
 ### 3. **Production-Ready Practices**
+
 - ✅ Circuit Breaker pattern for resilience
 - ✅ Async/await for scalability
 - ✅ Comprehensive error handling
@@ -514,6 +518,7 @@ This project demonstrates advanced software engineering and AI/ML skills:
 - ✅ Security with LLMGuard
 
 ### 4. **Modern Tech Stack**
+
 - ✅ FastAPI for high-performance APIs
 - ✅ MongoDB for flexible data storage
 - ✅ Docker for consistent deployment
@@ -521,12 +526,14 @@ This project demonstrates advanced software engineering and AI/ML skills:
 - ✅ MCP protocol implementation
 
 ### 5. **API Design**
+
 - ✅ RESTful API design
 - ✅ OpenAPI documentation
 - ✅ MCP server implementation
 - ✅ Dual-mode operation (REST + MCP)
 
 ### 6. **Security & Reliability**
+
 - ✅ Prompt injection detection
 - ✅ PII sanitization
 - ✅ Automatic failover
@@ -589,6 +596,7 @@ See `.env.example` for complete configuration options.
 ## 📊 System Requirements
 
 **Minimum:**
+
 - CPU: 2 cores
 - RAM: 4 GB
 - Disk: 2 GB
@@ -596,6 +604,7 @@ See `.env.example` for complete configuration options.
 - Docker Compose: 2.0+
 
 **Recommended:**
+
 - CPU: 4+ cores
 - RAM: 8+ GB
 - Disk: 10 GB (for document storage)
@@ -616,7 +625,7 @@ This is a portfolio project, but feedback and suggestions are welcome!
 
 ## 📄 License
 
-This project is for **educational and portfolio purposes**.
+This project is for **portfolio purposes**.
 
 Feel free to reference or learn from this code, but please provide attribution.
 
@@ -628,30 +637,5 @@ Feel free to reference or learn from this code, but please provide attribution.
 
 - GitHub: [@JoacoTschopp](https://github.com/JoacoTschopp)
 - LinkedIn: [Joaquin Tschopp](https://linkedin.com/in/joaquintschopp)
-
----
-
-## 🙏 Acknowledgments
-
-- **FastAPI** for the excellent framework
-- **LangChain** for LLM orchestration
-- **OpenAI** and **Google** for powerful LLM APIs
-- **MCP** community for the protocol specification
-- **ChromaDB** for vector storage
-
----
-
-## 📚 Additional Resources
-
-- [MCP Setup Guide](MCP_SETUP.md) - Detailed MCP integration instructions
-- [API Documentation](http://localhost:8000/docs) - Interactive API docs (when running)
-
----
-
-<div align="center">
-
-**Built with ❤️ using modern Python, AI technologies, and clean architecture principles**
-
-⭐ If you find this project useful for learning, please consider giving it a star!
 
 </div>
