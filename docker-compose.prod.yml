@@ -1,0 +1,72 @@
+version: "3.9"
+
+# Production Docker Compose Configuration
+# Extends the base docker-compose.yml with production-specific settings
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-agents-app-prod
+    restart: always
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - LOG_LEVEL=WARNING
+      - WORKERS=4
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+
+  mongodb:
+    image: mongo:7.0
+    container_name: ai-agents-mongodb-prod
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+    command: ["mongod", "--wiredTigerCacheSizeGB", "1"]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # Nginx reverse proxy for production
+  nginx:
+    image: nginx:alpine
+    container_name: ai-agents-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    networks:
+      - ai-agents-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+networks:
+  ai-agents-network:
+    driver: bridge

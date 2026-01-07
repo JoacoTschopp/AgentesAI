@@ -1,0 +1,105 @@
+version: "3.9"
+
+services:
+  # ===========================================
+  # AI Agents Platform - Main Application
+  # ===========================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-agents-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      # OpenAI Configuration
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_API_BASE:-https://api.openai.com/v1}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      # Google Gemini Configuration
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-1.5-pro}
+      # MongoDB Configuration
+      - MONGODB_URI=mongodb://mongodb:27017
+      - MONGODB_DATABASE=${MONGODB_DATABASE:-ai_agents}
+      # Pinecone Configuration
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - PINECONE_ENVIRONMENT=${PINECONE_ENVIRONMENT}
+      - PINECONE_INDEX_NAME=${PINECONE_INDEX_NAME:-ai-agents}
+      # LLMGuard Configuration
+      - LLMGUARD_ENABLED=${LLMGUARD_ENABLED:-true}
+      - LLMGUARD_RISK_THRESHOLD=${LLMGUARD_RISK_THRESHOLD:-0.7}
+      # Circuit Breaker Configuration
+      - CIRCUIT_BREAKER_FAIL_MAX=${CIRCUIT_BREAKER_FAIL_MAX:-5}
+      - CIRCUIT_BREAKER_RESET_TIMEOUT=${CIRCUIT_BREAKER_RESET_TIMEOUT:-60}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - ai-agents-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # ===========================================
+  # MongoDB - Session & Checkpoint Storage
+  # ===========================================
+  mongodb:
+    image: mongo:7.0
+    container_name: ai-agents-mongodb
+    restart: unless-stopped
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=${MONGODB_DATABASE:-ai_agents}
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - ai-agents-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ===========================================
+  # Mongo Express - MongoDB Admin UI (Dev only)
+  # ===========================================
+  mongo-express:
+    image: mongo-express:1.0
+    container_name: ai-agents-mongo-express
+    restart: unless-stopped
+    ports:
+      - "${MONGO_EXPRESS_PORT:-8081}:8081"
+    environment:
+      - ME_CONFIG_MONGODB_URL=mongodb://mongodb:27017
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USER:-admin}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASSWORD:-admin}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - ai-agents-network
+    profiles:
+      - dev
+
+networks:
+  ai-agents-network:
+    driver: bridge
+    name: ai-agents-network
+
+volumes:
+  mongodb_data:
+    name: ai-agents-mongodb-data
+  mongodb_config:
+    name: ai-agents-mongodb-config

@@ -1,0 +1,78 @@
+[tool.poetry]
+name = "ai-agents-platform"
+version = "1.0.0"
+description = "Production-ready AI Agents Platform with Hexagonal Architecture, LangGraph workflows, and FastAPI"
+authors = ["Joaquin Tschopp"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# FastAPI & Server
+fastapi = "^0.115.0"
+uvicorn = {extras = ["standard"], version = "^0.25.0"}
+python-multipart = "^0.0.20"
+
+# LangChain & LangGraph
+langchain = "^0.3.21"
+langchain-openai = "^0.3.0"
+langchain-google-genai = "^2.1.0"
+langchain-community = "^0.3.20"
+langchain-chroma = "^0.1.2"
+langgraph = "^0.4.0"
+langgraph-checkpoint-mongodb = "^0.1.0"
+
+# Database & Storage
+pymongo = "^4.10.0"
+motor = "^3.6.0"
+pinecone-client = "^5.0.0"
+chromadb = "^0.4.22"
+
+# PDF Processing
+pypdf = "^4.0.0"
+
+# MCP (Model Context Protocol)
+mcp = "^1.0.0"
+
+# Security & Sanitization
+pydantic = "^2.5.3"
+pydantic-settings = "^2.1.0"
+
+# HTTP & Async
+httpx = "^0.28.0"
+aiohttp = "^3.11.0"
+
+# Utilities
+python-dotenv = "^1.0.1"
+tenacity = "^9.0.0"
+structlog = "^24.4.0"
+
+# Circuit Breaker
+pybreaker = "^1.2.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.0.0"
+isort = "^5.13.0"
+mypy = "^1.14.0"
+ruff = "^0.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_ignores = true
